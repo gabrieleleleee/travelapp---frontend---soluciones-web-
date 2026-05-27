@@ -1,0 +1,71 @@
+<div class="container">
+  <h1>Proveedor</h1>
+
+  <!-- ✅ Signals se leen con () en el template -->
+  @if (mensajeExito()) {
+    <div class="alerta-exito">{{ mensajeExito() }}</div>
+  }
+  @if (mensajeError()) {
+    <div class="alerta-error">{{ mensajeError() }}</div>
+  }
+
+  <div class="card">
+    <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+
+      <div class="form-group">
+        <label>Razón Social *</label>
+        <input type="text" formControlName="razonSocial" required>
+        @if (formulario.get('razonSocial')?.invalid && formulario.get('razonSocial')?.touched) {
+          <span class="error">Razón Social es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>RUC *</label>
+        <input type="text" formControlName="ruc" required>
+        @if (formulario.get('ruc')?.invalid && formulario.get('ruc')?.touched) {
+          <span class="error">RUC es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" formControlName="telefono" >
+        @if (formulario.get('telefono')?.invalid && formulario.get('telefono')?.touched) {
+          <span class="error">Teléfono es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Dirección</label>
+        <input type="text" formControlName="direccion" >
+        @if (formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched) {
+          <span class="error">Dirección es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" formControlName="estado"> Activo</label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
+          {{ editando() ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Lista de Registros</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Razón Social</th><th>RUC</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <!-- ✅ lista() con paréntesis para leer el Signal -->
+        @for (item of lista(); track $index) {
+          <tr><td>{{ item.idProveedor }}</td><td>{{ item.razonSocial }}</td><td>{{ item.ruc }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idProveedor)">Eliminar</button></td></tr>
+        }
+        @if (lista().length === 0) {
+          <tr><td colspan="5" class="sin-datos">No hay registros disponibles.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
