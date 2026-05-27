@@ -1,0 +1,78 @@
+<div class="container">
+  <h1>HistorialMantenimiento</h1>
+
+  <!-- ✅ Signals se leen con () en el template -->
+  @if (mensajeExito()) {
+    <div class="alerta-exito">{{ mensajeExito() }}</div>
+  }
+  @if (mensajeError()) {
+    <div class="alerta-error">{{ mensajeError() }}</div>
+  }
+
+  <div class="card">
+    <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+
+      <div class="form-group">
+        <label>Fecha *</label>
+        <input type="datetime-local" formControlName="fechaMantenimiento" required>
+        @if (formulario.get('fechaMantenimiento')?.invalid && formulario.get('fechaMantenimiento')?.touched) {
+          <span class="error">Fecha es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Tipo *</label>
+        <input type="text" formControlName="tipoMantenimiento" required>
+        @if (formulario.get('tipoMantenimiento')?.invalid && formulario.get('tipoMantenimiento')?.touched) {
+          <span class="error">Tipo es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Descripción *</label>
+        <input type="text" formControlName="descripcionActividad" required>
+        @if (formulario.get('descripcionActividad')?.invalid && formulario.get('descripcionActividad')?.touched) {
+          <span class="error">Descripción es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Técnico *</label>
+        <input type="text" formControlName="tecnicoResponsable" required>
+        @if (formulario.get('tecnicoResponsable')?.invalid && formulario.get('tecnicoResponsable')?.touched) {
+          <span class="error">Técnico es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Costo *</label>
+        <input type="number" formControlName="costo" required>
+        @if (formulario.get('costo')?.invalid && formulario.get('costo')?.touched) {
+          <span class="error">Costo es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" formControlName="estado"> Activo</label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
+          {{ editando() ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Lista de Registros</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Tipo</th><th>Técnico</th><th>Costo</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <!-- ✅ lista() con paréntesis para leer el Signal -->
+        @for (item of lista(); track $index) {
+          <tr><td>{{ item.idMantenimiento }}</td><td>{{ item.tipoMantenimiento }}</td><td>{{ item.tecnicoResponsable }}</td><td>{{ item.costo }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idMantenimiento)">Eliminar</button></td></tr>
+        }
+        @if (lista().length === 0) {
+          <tr><td colspan="6" class="sin-datos">No hay registros disponibles.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
