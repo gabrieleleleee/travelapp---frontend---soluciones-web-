@@ -1,0 +1,78 @@
+<div class="container">
+  <h1>Lote</h1>
+
+  <!-- ✅ Signals se leen con () en el template -->
+  @if (mensajeExito()) {
+    <div class="alerta-exito">{{ mensajeExito() }}</div>
+  }
+  @if (mensajeError()) {
+    <div class="alerta-error">{{ mensajeError() }}</div>
+  }
+
+  <div class="card">
+    <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()">
+
+      <div class="form-group">
+        <label>Código Lote *</label>
+        <input type="text" formControlName="codigoLote" required>
+        @if (formulario.get('codigoLote')?.invalid && formulario.get('codigoLote')?.touched) {
+          <span class="error">Código Lote es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Fecha Producción *</label>
+        <input type="date" formControlName="fechaProduccion" required>
+        @if (formulario.get('fechaProduccion')?.invalid && formulario.get('fechaProduccion')?.touched) {
+          <span class="error">Fecha Producción es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Cantidad *</label>
+        <input type="number" formControlName="cantidadProducida" required>
+        @if (formulario.get('cantidadProducida')?.invalid && formulario.get('cantidadProducida')?.touched) {
+          <span class="error">Cantidad es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Estado Lote *</label>
+        <input type="text" formControlName="estadoLote" required>
+        @if (formulario.get('estadoLote')?.invalid && formulario.get('estadoLote')?.touched) {
+          <span class="error">Estado Lote es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" formControlName="observaciones" >
+        @if (formulario.get('observaciones')?.invalid && formulario.get('observaciones')?.touched) {
+          <span class="error">Observaciones es obligatorio.</span>
+        }
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" formControlName="estado"> Activo</label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
+          {{ editando() ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Lista de Registros</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Código</th><th>Fecha</th><th>Cantidad</th><th>Estado Lote</th><th>Activo</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <!-- ✅ lista() con paréntesis para leer el Signal -->
+        @for (item of lista(); track $index) {
+          <tr><td>{{ item.idLote }}</td><td>{{ item.codigoLote }}</td><td>{{ item.fechaProduccion }}</td><td>{{ item.cantidadProducida }}</td><td>{{ item.estadoLote }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idLote)">Eliminar</button></td></tr>
+        }
+        @if (lista().length === 0) {
+          <tr><td colspan="7" class="sin-datos">No hay registros disponibles.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
