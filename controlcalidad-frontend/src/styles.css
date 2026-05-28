@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+input[type="checkbox"] {
+  width: auto !important;
+  margin-right: 8px;
+  vertical-align: middle;
+  display: inline !important;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

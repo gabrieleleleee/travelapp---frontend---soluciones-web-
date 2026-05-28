@@ -21,3 +21,12 @@ tr:hover { background-color: #f9f9f9; }
 .alerta-exito { background-color: #e8f5e9; color: #2e7d32; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #4caf50; }
 .alerta-error { background-color: #ffebee; color: #c62828; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; border-left: 4px solid #e53935; }
 .info-fk { background-color: #e3f2fd; color: #1565c0; padding: 8px 12px; border-radius: 4px; margin-bottom: 15px; font-size: 13px; border-left: 3px solid #1976D2; }
+
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+
+input[type='checkbox'] { width: auto; margin-right: 8px; vertical-align: middle; }
