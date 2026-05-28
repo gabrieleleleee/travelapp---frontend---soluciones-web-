@@ -11,34 +11,29 @@ import { DevolucionLoteService } from '../../services/devolucion-lote.service';
   styleUrl: './devolucion-lote.component.css',
 })
 export class DevolucionLoteComponent implements OnInit {
-
-  // ✅ Signals en lugar de propiedades normales (NO Observables)
   protected lista = signal<DevolucionLote[]>([]);
   protected editando = signal<boolean>(false);
   protected idSeleccionado = signal<number>(0);
   protected mensajeExito = signal<string>('');
   protected mensajeError = signal<string>('');
-
   protected formulario: FormGroup;
   private readonly service = inject(DevolucionLoteService);
   private readonly fb = inject(FormBuilder);
 
   constructor() {
     this.formulario = this.fb.group({
-    fechaDevolucion: ['', [Validators.required]],
-    motivoDevolucion: ['', [Validators.required]],
-    cantidadDevuelta: [0, [Validators.required, Validators.min(0)]],
-    estado: [false],
+      idLote: [0, [Validators.required, Validators.min(1)]],
+      fechaDevolucion: ['', [Validators.required]],
+      motivoDevolucion: ['', [Validators.required]],
+      cantidadDevuelta: [0, [Validators.required, Validators.min(1)]],
+      estado: [false],
     });
   }
 
-  ngOnInit(): void {
-    this.cargarDatos();
-  }
+  ngOnInit(): void { this.cargarDatos(); }
 
   cargarDatos(): void {
     this.service.findAll().subscribe({
-      // ✅ Usamos signal.set() para actualizar el estado
       next: (data) => this.lista.set(data),
       error: () => this.mensajeError.set('Error al cargar los datos.')
     });
@@ -47,29 +42,28 @@ export class DevolucionLoteComponent implements OnInit {
   guardar(): void {
     if (this.formulario.invalid) return;
     const datos = this.formulario.value as DevolucionLote;
+
+    if (datos.fechaDevolucion) {
+      const d = new Date(datos.fechaDevolucion + 'T12:00:00');
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const dd = String(d.getDate()).padStart(2,'0');
+      datos.fechaDevolucion = `${y}-${m}-${dd}`;
+    }
     if (this.editando()) {
       this.service.update(this.idSeleccionado(), datos).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro actualizado correctamente.');
-          this.limpiar();
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro actualizado correctamente.'); this.limpiar(); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al actualizar el registro.')
       });
     } else {
       this.service.save(datos).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro creado correctamente.');
-          this.limpiar();
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro creado correctamente.'); this.limpiar(); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al crear el registro.')
       });
     }
   }
 
   editar(item: DevolucionLote): void {
-    // ✅ signal.set() para actualizar estado de edición
     this.editando.set(true);
     this.idSeleccionado.set((item as any).idDevolucion);
     this.formulario.patchValue(item as any);
@@ -78,12 +72,9 @@ export class DevolucionLoteComponent implements OnInit {
   }
 
   eliminar(id: number): void {
-    if (confirm('¿Está seguro de eliminar este registro?')) {
+    if (confirm('Seguro de eliminar este registro?')) {
       this.service.delete(id).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro eliminado correctamente.');
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro eliminado correctamente.'); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al eliminar el registro.')
       });
     }
@@ -91,7 +82,6 @@ export class DevolucionLoteComponent implements OnInit {
 
   limpiar(): void {
     this.formulario.reset();
-    // ✅ Reseteamos todos los signals
     this.editando.set(false);
     this.idSeleccionado.set(0);
     this.mensajeExito.set('');

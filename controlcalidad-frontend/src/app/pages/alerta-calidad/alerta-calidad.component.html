@@ -1,63 +1,46 @@
 <div class="container">
-  <h1>AlertaCalidad</h1>
-
-  <!-- ✅ Signals se leen con () en el template -->
-  @if (mensajeExito()) {
-    <div class="alerta-exito">{{ mensajeExito() }}</div>
-  }
-  @if (mensajeError()) {
-    <div class="alerta-error">{{ mensajeError() }}</div>
-  }
-
+  <h1>Alertas de Calidad</h1>
+  @if (mensajeExito()) { <div class="alerta-exito">{{ mensajeExito() }}</div> }
+  @if (mensajeError()) { <div class="alerta-error">{{ mensajeError() }}</div> }
   <div class="card">
     <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
     <form [formGroup]="formulario" (ngSubmit)="guardar()">
 
-      <div class="form-group">
-        <label>Título *</label>
-        <input type="text" formControlName="titulo" required>
-        @if (formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched) {
-          <span class="error">Título es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Mensaje *</label>
-        <input type="text" formControlName="mensaje" required>
-        @if (formulario.get('mensaje')?.invalid && formulario.get('mensaje')?.touched) {
-          <span class="error">Mensaje es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Fecha *</label>
-        <input type="date" formControlName="fechaAlerta" required>
-        @if (formulario.get('fechaAlerta')?.invalid && formulario.get('fechaAlerta')?.touched) {
-          <span class="error">Fecha es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label><input type="checkbox" formControlName="estado"> Activo</label>
-      </div>
+    <div class="form-group">
+      <label>Título *</label>
+      <input type="text" formControlName="titulo" required>
+      @if (formulario.get('titulo')?.invalid && formulario.get('titulo')?.touched) {
+        <span class="error">Título es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Mensaje *</label>
+      <input type="text" formControlName="mensaje" required>
+      @if (formulario.get('mensaje')?.invalid && formulario.get('mensaje')?.touched) {
+        <span class="error">Mensaje es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Fecha de Alerta *</label>
+      <input type="date" formControlName="fechaAlerta" required>
+      @if (formulario.get('fechaAlerta')?.invalid && formulario.get('fechaAlerta')?.touched) {
+        <span class="error">Fecha de Alerta es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group"><label><input type="checkbox" formControlName="estado"> Activo</label></div>
       <div class="form-actions">
-        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
-          {{ editando() ? 'Actualizar' : 'Guardar' }}
-        </button>
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">{{ editando() ? 'Actualizar' : 'Guardar' }}</button>
         <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
       </div>
     </form>
   </div>
-
   <div class="card">
     <h2>Lista de Registros</h2>
     <table>
       <thead><tr><th>ID</th><th>Título</th><th>Mensaje</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
       <tbody>
-        <!-- ✅ lista() con paréntesis para leer el Signal -->
-        @for (item of lista(); track $index) {
-          <tr><td>{{ item.idAlerta }}</td><td>{{ item.titulo }}</td><td>{{ item.mensaje }}</td><td>{{ item.fechaAlerta }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idAlerta)">Eliminar</button></td></tr>
-        }
-        @if (lista().length === 0) {
-          <tr><td colspan="6" class="sin-datos">No hay registros disponibles.</td></tr>
-        }
+        @for (item of lista(); track $index) { <tr><td>{{ item.idAlerta }}</td><td>{{ item.titulo }}</td><td>{{ item.mensaje }}</td><td>{{ item.fechaAlerta }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idAlerta)">Eliminar</button></td></tr> }
+        @if (lista().length === 0) { <tr><td colspan="6" class="sin-datos">No hay registros.</td></tr> }
       </tbody>
     </table>
   </div>

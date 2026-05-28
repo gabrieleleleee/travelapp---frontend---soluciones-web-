@@ -1,63 +1,46 @@
 <div class="container">
-  <h1>Defecto</h1>
-
-  <!-- ✅ Signals se leen con () en el template -->
-  @if (mensajeExito()) {
-    <div class="alerta-exito">{{ mensajeExito() }}</div>
-  }
-  @if (mensajeError()) {
-    <div class="alerta-error">{{ mensajeError() }}</div>
-  }
-
+  <h1>Defectos</h1>
+  @if (mensajeExito()) { <div class="alerta-exito">{{ mensajeExito() }}</div> }
+  @if (mensajeError()) { <div class="alerta-error">{{ mensajeError() }}</div> }
   <div class="card">
     <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
     <form [formGroup]="formulario" (ngSubmit)="guardar()">
 
-      <div class="form-group">
-        <label>Tipo de Defecto *</label>
-        <input type="text" formControlName="tipoDefecto" required>
-        @if (formulario.get('tipoDefecto')?.invalid && formulario.get('tipoDefecto')?.touched) {
-          <span class="error">Tipo de Defecto es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Descripción *</label>
-        <input type="text" formControlName="descripcion" required>
-        @if (formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched) {
-          <span class="error">Descripción es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Fecha *</label>
-        <input type="date" formControlName="fechaRegistro" required>
-        @if (formulario.get('fechaRegistro')?.invalid && formulario.get('fechaRegistro')?.touched) {
-          <span class="error">Fecha es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label><input type="checkbox" formControlName="estado"> Activo</label>
-      </div>
+    <div class="form-group">
+      <label>Tipo de Defecto *</label>
+      <input type="text" formControlName="tipoDefecto" required>
+      @if (formulario.get('tipoDefecto')?.invalid && formulario.get('tipoDefecto')?.touched) {
+        <span class="error">Tipo de Defecto es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Descripción *</label>
+      <input type="text" formControlName="descripcion" required>
+      @if (formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched) {
+        <span class="error">Descripción es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Fecha *</label>
+      <input type="date" formControlName="fechaRegistro" required>
+      @if (formulario.get('fechaRegistro')?.invalid && formulario.get('fechaRegistro')?.touched) {
+        <span class="error">Fecha es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group"><label><input type="checkbox" formControlName="estado"> Activo</label></div>
       <div class="form-actions">
-        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
-          {{ editando() ? 'Actualizar' : 'Guardar' }}
-        </button>
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">{{ editando() ? 'Actualizar' : 'Guardar' }}</button>
         <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
       </div>
     </form>
   </div>
-
   <div class="card">
     <h2>Lista de Registros</h2>
     <table>
       <thead><tr><th>ID</th><th>Tipo</th><th>Descripción</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
       <tbody>
-        <!-- ✅ lista() con paréntesis para leer el Signal -->
-        @for (item of lista(); track $index) {
-          <tr><td>{{ item.idDefecto }}</td><td>{{ item.tipoDefecto }}</td><td>{{ item.descripcion }}</td><td>{{ item.fechaRegistro }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idDefecto)">Eliminar</button></td></tr>
-        }
-        @if (lista().length === 0) {
-          <tr><td colspan="6" class="sin-datos">No hay registros disponibles.</td></tr>
-        }
+        @for (item of lista(); track $index) { <tr><td>{{ item.idDefecto }}</td><td>{{ item.tipoDefecto }}</td><td>{{ item.descripcion }}</td><td>{{ item.fechaRegistro }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idDefecto)">Eliminar</button></td></tr> }
+        @if (lista().length === 0) { <tr><td colspan="6" class="sin-datos">No hay registros.</td></tr> }
       </tbody>
     </table>
   </div>

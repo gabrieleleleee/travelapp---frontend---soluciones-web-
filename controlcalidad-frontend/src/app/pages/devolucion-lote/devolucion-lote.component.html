@@ -1,63 +1,54 @@
 <div class="container">
-  <h1>DevolucionLote</h1>
-
-  <!-- ✅ Signals se leen con () en el template -->
-  @if (mensajeExito()) {
-    <div class="alerta-exito">{{ mensajeExito() }}</div>
-  }
-  @if (mensajeError()) {
-    <div class="alerta-error">{{ mensajeError() }}</div>
-  }
-
+  <h1>Devoluciones de Lote</h1>
+  @if (mensajeExito()) { <div class="alerta-exito">{{ mensajeExito() }}</div> }
+  @if (mensajeError()) { <div class="alerta-error">{{ mensajeError() }}</div> }
   <div class="card">
     <h2>{{ editando() ? 'Editar Registro' : 'Nuevo Registro' }}</h2>
     <form [formGroup]="formulario" (ngSubmit)="guardar()">
 
-      <div class="form-group">
-        <label>Fecha Devolución *</label>
-        <input type="date" formControlName="fechaDevolucion" required>
-        @if (formulario.get('fechaDevolucion')?.invalid && formulario.get('fechaDevolucion')?.touched) {
-          <span class="error">Fecha Devolución es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Motivo *</label>
-        <input type="text" formControlName="motivoDevolucion" required>
-        @if (formulario.get('motivoDevolucion')?.invalid && formulario.get('motivoDevolucion')?.touched) {
-          <span class="error">Motivo es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label>Cantidad *</label>
-        <input type="number" formControlName="cantidadDevuelta" required>
-        @if (formulario.get('cantidadDevuelta')?.invalid && formulario.get('cantidadDevuelta')?.touched) {
-          <span class="error">Cantidad es obligatorio.</span>
-        }
-      </div>
-      <div class="form-group">
-        <label><input type="checkbox" formControlName="estado"> Activo</label>
-      </div>
+    <div class="info-fk">Ingresa los IDs requeridos. Puedes verlos en sus secciones correspondientes.</div>
+    <div class="form-group">
+      <label>ID del Lote *</label>
+      <input type="number" formControlName="idLote" required>
+      @if (formulario.get('idLote')?.invalid && formulario.get('idLote')?.touched) {
+        <span class="error">ID del Lote es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Fecha de Devolución *</label>
+      <input type="date" formControlName="fechaDevolucion" required>
+      @if (formulario.get('fechaDevolucion')?.invalid && formulario.get('fechaDevolucion')?.touched) {
+        <span class="error">Fecha de Devolución es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Motivo *</label>
+      <input type="text" formControlName="motivoDevolucion" required>
+      @if (formulario.get('motivoDevolucion')?.invalid && formulario.get('motivoDevolucion')?.touched) {
+        <span class="error">Motivo es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Cantidad Devuelta *</label>
+      <input type="number" formControlName="cantidadDevuelta" required>
+      @if (formulario.get('cantidadDevuelta')?.invalid && formulario.get('cantidadDevuelta')?.touched) {
+        <span class="error">Cantidad Devuelta es obligatorio.</span>
+      }
+    </div>
+    <div class="form-group"><label><input type="checkbox" formControlName="estado"> Activo</label></div>
       <div class="form-actions">
-        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">
-          {{ editando() ? 'Actualizar' : 'Guardar' }}
-        </button>
+        <button type="submit" class="btn-guardar" [disabled]="formulario.invalid">{{ editando() ? 'Actualizar' : 'Guardar' }}</button>
         <button type="button" class="btn-cancelar" (click)="limpiar()">Cancelar</button>
       </div>
     </form>
   </div>
-
   <div class="card">
     <h2>Lista de Registros</h2>
     <table>
       <thead><tr><th>ID</th><th>Motivo</th><th>Cantidad</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
       <tbody>
-        <!-- ✅ lista() con paréntesis para leer el Signal -->
-        @for (item of lista(); track $index) {
-          <tr><td>{{ item.idDevolucion }}</td><td>{{ item.motivoDevolucion }}</td><td>{{ item.cantidadDevuelta }}</td><td>{{ item.fechaDevolucion }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idDevolucion)">Eliminar</button></td></tr>
-        }
-        @if (lista().length === 0) {
-          <tr><td colspan="6" class="sin-datos">No hay registros disponibles.</td></tr>
-        }
+        @for (item of lista(); track $index) { <tr><td>{{ item.idDevolucion }}</td><td>{{ item.motivoDevolucion }}</td><td>{{ item.cantidadDevuelta }}</td><td>{{ item.fechaDevolucion }}</td><td>{{ item.estado ? 'Sí' : 'No' }}</td><td><button class="btn-editar" (click)="editar(item)">Editar</button> <button class="btn-eliminar" (click)="eliminar(item.idDevolucion)">Eliminar</button></td></tr> }
+        @if (lista().length === 0) { <tr><td colspan="6" class="sin-datos">No hay registros.</td></tr> }
       </tbody>
     </table>
   </div>

@@ -11,34 +11,28 @@ import { DefectoService } from '../../services/defecto.service';
   styleUrl: './defecto.component.css',
 })
 export class DefectoComponent implements OnInit {
-
-  // ✅ Signals en lugar de propiedades normales (NO Observables)
   protected lista = signal<Defecto[]>([]);
   protected editando = signal<boolean>(false);
   protected idSeleccionado = signal<number>(0);
   protected mensajeExito = signal<string>('');
   protected mensajeError = signal<string>('');
-
   protected formulario: FormGroup;
   private readonly service = inject(DefectoService);
   private readonly fb = inject(FormBuilder);
 
   constructor() {
     this.formulario = this.fb.group({
-    tipoDefecto: ['', [Validators.required]],
-    descripcion: ['', [Validators.required]],
-    fechaRegistro: ['', [Validators.required]],
-    estado: [false],
+      tipoDefecto: ['', [Validators.required]],
+      descripcion: ['', [Validators.required]],
+      fechaRegistro: ['', [Validators.required]],
+      estado: [false],
     });
   }
 
-  ngOnInit(): void {
-    this.cargarDatos();
-  }
+  ngOnInit(): void { this.cargarDatos(); }
 
   cargarDatos(): void {
     this.service.findAll().subscribe({
-      // ✅ Usamos signal.set() para actualizar el estado
       next: (data) => this.lista.set(data),
       error: () => this.mensajeError.set('Error al cargar los datos.')
     });
@@ -47,29 +41,28 @@ export class DefectoComponent implements OnInit {
   guardar(): void {
     if (this.formulario.invalid) return;
     const datos = this.formulario.value as Defecto;
+
+    if (datos.fechaRegistro) {
+      const d = new Date(datos.fechaRegistro + 'T12:00:00');
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const dd = String(d.getDate()).padStart(2,'0');
+      datos.fechaRegistro = `${y}-${m}-${dd}`;
+    }
     if (this.editando()) {
       this.service.update(this.idSeleccionado(), datos).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro actualizado correctamente.');
-          this.limpiar();
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro actualizado correctamente.'); this.limpiar(); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al actualizar el registro.')
       });
     } else {
       this.service.save(datos).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro creado correctamente.');
-          this.limpiar();
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro creado correctamente.'); this.limpiar(); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al crear el registro.')
       });
     }
   }
 
   editar(item: Defecto): void {
-    // ✅ signal.set() para actualizar estado de edición
     this.editando.set(true);
     this.idSeleccionado.set((item as any).idDefecto);
     this.formulario.patchValue(item as any);
@@ -78,12 +71,9 @@ export class DefectoComponent implements OnInit {
   }
 
   eliminar(id: number): void {
-    if (confirm('¿Está seguro de eliminar este registro?')) {
+    if (confirm('Seguro de eliminar este registro?')) {
       this.service.delete(id).subscribe({
-        next: () => {
-          this.mensajeExito.set('Registro eliminado correctamente.');
-          this.cargarDatos();
-        },
+        next: () => { this.mensajeExito.set('Registro eliminado correctamente.'); this.cargarDatos(); },
         error: () => this.mensajeError.set('Error al eliminar el registro.')
       });
     }
@@ -91,7 +81,6 @@ export class DefectoComponent implements OnInit {
 
   limpiar(): void {
     this.formulario.reset();
-    // ✅ Reseteamos todos los signals
     this.editando.set(false);
     this.idSeleccionado.set(0);
     this.mensajeExito.set('');
