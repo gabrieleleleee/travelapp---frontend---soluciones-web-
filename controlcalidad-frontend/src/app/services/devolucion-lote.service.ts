@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DevolucionLote } from '../model/devolucion-lote';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para DevolucionLote.
+ * Extiende GenericService<DevolucionLote> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class DevolucionLoteService {
-  private url = `${environment.HOST}/devoluciones`;
-  private readonly http = inject(HttpClient);
+export class DevolucionLoteService extends GenericService<DevolucionLote> {
 
-  findAll() {
-    return this.http.get<DevolucionLote[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<DevolucionLote>(`${this.url}/${id}`);
-  }
-
-  save(dato: DevolucionLote) {
-    return this.http.post<DevolucionLote>(this.url, dato);
-  }
-
-  update(id: number, dato: DevolucionLote) {
-    return this.http.put<DevolucionLote>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/devoluciones`;
   }
 }

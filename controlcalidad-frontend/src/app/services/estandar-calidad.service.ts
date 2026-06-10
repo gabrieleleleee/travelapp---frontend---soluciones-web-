@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EstandarCalidad } from '../model/estandar-calidad';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para EstandarCalidad.
+ * Extiende GenericService<EstandarCalidad> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class EstandarCalidadService {
-  private url = `${environment.HOST}/estandares`;
-  private readonly http = inject(HttpClient);
+export class EstandarCalidadService extends GenericService<EstandarCalidad> {
 
-  findAll() {
-    return this.http.get<EstandarCalidad[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<EstandarCalidad>(`${this.url}/${id}`);
-  }
-
-  save(dato: EstandarCalidad) {
-    return this.http.post<EstandarCalidad>(this.url, dato);
-  }
-
-  update(id: number, dato: EstandarCalidad) {
-    return this.http.put<EstandarCalidad>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/estandares`;
   }
 }

@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CapacitacionPersonal } from '../model/capacitacion-personal';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para CapacitacionPersonal.
+ * Extiende GenericService<CapacitacionPersonal> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class CapacitacionPersonalService {
-  private url = `${environment.HOST}/capacitaciones`;
-  private readonly http = inject(HttpClient);
+export class CapacitacionPersonalService extends GenericService<CapacitacionPersonal> {
 
-  findAll() {
-    return this.http.get<CapacitacionPersonal[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<CapacitacionPersonal>(`${this.url}/${id}`);
-  }
-
-  save(dato: CapacitacionPersonal) {
-    return this.http.post<CapacitacionPersonal>(this.url, dato);
-  }
-
-  update(id: number, dato: CapacitacionPersonal) {
-    return this.http.put<CapacitacionPersonal>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/capacitaciones`;
   }
 }

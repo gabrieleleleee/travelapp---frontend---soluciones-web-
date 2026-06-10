@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Proveedor } from '../model/proveedor';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para Proveedor.
+ * Extiende GenericService<Proveedor> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class ProveedorService {
-  private url = `${environment.HOST}/proveedores`;
-  private readonly http = inject(HttpClient);
+export class ProveedorService extends GenericService<Proveedor> {
 
-  findAll() {
-    return this.http.get<Proveedor[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<Proveedor>(`${this.url}/${id}`);
-  }
-
-  save(dato: Proveedor) {
-    return this.http.post<Proveedor>(this.url, dato);
-  }
-
-  update(id: number, dato: Proveedor) {
-    return this.http.put<Proveedor>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/proveedores`;
   }
 }

@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Usuario } from '../model/usuario';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para Usuario.
+ * Extiende GenericService<Usuario> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class UsuarioService {
-  private url = `${environment.HOST}/usuarios`;
-  private readonly http = inject(HttpClient);
+export class UsuarioService extends GenericService<Usuario> {
 
-  findAll() {
-    return this.http.get<Usuario[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<Usuario>(`${this.url}/${id}`);
-  }
-
-  save(dato: Usuario) {
-    return this.http.post<Usuario>(this.url, dato);
-  }
-
-  update(id: number, dato: Usuario) {
-    return this.http.put<Usuario>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/usuarios`;
   }
 }

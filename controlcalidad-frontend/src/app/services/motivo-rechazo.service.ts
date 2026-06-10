@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MotivoRechazo } from '../model/motivo-rechazo';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para MotivoRechazo.
+ * Extiende GenericService<MotivoRechazo> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class MotivoRechazoService {
-  private url = `${environment.HOST}/motivos-rechazo`;
-  private readonly http = inject(HttpClient);
+export class MotivoRechazoService extends GenericService<MotivoRechazo> {
 
-  findAll() {
-    return this.http.get<MotivoRechazo[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<MotivoRechazo>(`${this.url}/${id}`);
-  }
-
-  save(dato: MotivoRechazo) {
-    return this.http.post<MotivoRechazo>(this.url, dato);
-  }
-
-  update(id: number, dato: MotivoRechazo) {
-    return this.http.put<MotivoRechazo>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/motivos-rechazo`;
   }
 }

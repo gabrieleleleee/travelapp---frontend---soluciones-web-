@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AreaProduccion } from '../model/area-produccion';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para AreaProduccion.
+ * Extiende GenericService<AreaProduccion> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class AreaProduccionService {
-  private url = `${environment.HOST}/areas-produccion`;
-  private readonly http = inject(HttpClient);
+export class AreaProduccionService extends GenericService<AreaProduccion> {
 
-  findAll() {
-    return this.http.get<AreaProduccion[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<AreaProduccion>(`${this.url}/${id}`);
-  }
-
-  save(dato: AreaProduccion) {
-    return this.http.post<AreaProduccion>(this.url, dato);
-  }
-
-  update(id: number, dato: AreaProduccion) {
-    return this.http.put<AreaProduccion>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/areas-produccion`;
   }
 }

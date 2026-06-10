@@ -1,32 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BitacoraAuditoria } from '../model/bitacora-auditoria';
+import { GenericService } from './generic.service';
 import { environment } from '../../environments/environment.development';
 
+/**
+ * Service para BitacoraAuditoria.
+ * Extiende GenericService<BitacoraAuditoria> para heredar los 5 métodos HTTP
+ * sin necesidad de redefinirlos.
+ * Solo implementa getUrl() con su endpoint específico.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class BitacoraAuditoriaService {
-  private url = `${environment.HOST}/bitacora-auditoria`;
-  private readonly http = inject(HttpClient);
+export class BitacoraAuditoriaService extends GenericService<BitacoraAuditoria> {
 
-  findAll() {
-    return this.http.get<BitacoraAuditoria[]>(this.url);
-  }
-
-  findById(id: number) {
-    return this.http.get<BitacoraAuditoria>(`${this.url}/${id}`);
-  }
-
-  save(dato: BitacoraAuditoria) {
-    return this.http.post<BitacoraAuditoria>(this.url, dato);
-  }
-
-  update(id: number, dato: BitacoraAuditoria) {
-    return this.http.put<BitacoraAuditoria>(`${this.url}/${id}`, dato);
-  }
-
-  delete(id: number) {
-    return this.http.delete(`${this.url}/${id}`);
+  protected override getUrl(): string {
+    return `${environment.HOST}/bitacora-auditoria`;
   }
 }
