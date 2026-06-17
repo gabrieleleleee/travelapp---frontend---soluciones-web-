@@ -1,47 +1,58 @@
-<div class="sidebar">
-  <div class="sidebar-header">
-    <h2>🏭 Control Calidad</h2>
+@if (authService.isAuthenticated()) {
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>🏭 Control Calidad</h2>
+      <div class="user-info">
+        <span class="user-name">{{ authService.currentUser()?.nombreCompleto }}</span>
+        <span class="user-role">{{ authService.currentUser()?.roles?.[0] }}</span>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">
+        <span class="nav-label">👤 Fabian</span>
+        <a routerLink="/roles" routerLinkActive="active">Roles</a>
+        <a routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
+        <a routerLink="/productos" routerLinkActive="active">Productos</a>
+        <a routerLink="/estandares" routerLinkActive="active">Estándares</a>
+        <a routerLink="/lotes" routerLinkActive="active">Lotes</a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">🔧 Frank</span>
+        <a routerLink="/materias-primas" routerLinkActive="active">Materias Primas</a>
+        <a routerLink="/proveedores" routerLinkActive="active">Proveedores</a>
+        <a routerLink="/maquinarias" routerLinkActive="active">Maquinaria</a>
+        <a routerLink="/inspecciones" routerLinkActive="active">Inspecciones</a>
+        <a routerLink="/acciones-correctivas" routerLinkActive="active">Acciones Correctivas</a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">📋 Ketty</span>
+        <a routerLink="/areas-produccion" routerLinkActive="active">Áreas Producción</a>
+        <a routerLink="/bitacora" routerLinkActive="active">Bitácora</a>
+        <a routerLink="/motivos-rechazo" routerLinkActive="active">Motivos Rechazo</a>
+        <a routerLink="/unidades-medida" routerLinkActive="active">Unidades Medida</a>
+        <a routerLink="/permisos" routerLinkActive="active">Permisos</a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">📊 Mirian</span>
+        <a routerLink="/defectos" routerLinkActive="active">Defectos</a>
+        <a routerLink="/alertas" routerLinkActive="active">Alertas Calidad</a>
+        <a routerLink="/capacitaciones" routerLinkActive="active">Capacitaciones</a>
+        <a routerLink="/devoluciones" routerLinkActive="active">Devoluciones</a>
+        <a routerLink="/historiales" routerLinkActive="active">Historial Mant.</a>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">⚙️ Gabriel</span>
+        <a routerLink="/detalles-inspeccion" routerLinkActive="active">Detalles Inspección</a>
+        <a routerLink="/categorias" routerLinkActive="active">Categorías</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="cerrarSesion()">🚪 Cerrar Sesión</button>
+    </div>
   </div>
-  <nav>
-    <div class="nav-section">
-      <span class="nav-label">👤 Fabian</span>
-      <a routerLink="/roles" routerLinkActive="active">Roles</a>
-      <a routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
-      <a routerLink="/productos" routerLinkActive="active">Productos</a>
-      <a routerLink="/estandares" routerLinkActive="active">Estándares</a>
-      <a routerLink="/lotes" routerLinkActive="active">Lotes</a>
-    </div>
-    <div class="nav-section">
-      <span class="nav-label">🔧 Frank</span>
-      <a routerLink="/materias-primas" routerLinkActive="active">Materias Primas</a>
-      <a routerLink="/proveedores" routerLinkActive="active">Proveedores</a>
-      <a routerLink="/maquinarias" routerLinkActive="active">Maquinaria</a>
-      <a routerLink="/inspecciones" routerLinkActive="active">Inspecciones</a>
-      <a routerLink="/acciones-correctivas" routerLinkActive="active">Acciones Correctivas</a>
-    </div>
-    <div class="nav-section">
-      <span class="nav-label">📋 Ketty</span>
-      <a routerLink="/areas-produccion" routerLinkActive="active">Áreas Producción</a>
-      <a routerLink="/bitacora" routerLinkActive="active">Bitácora</a>
-      <a routerLink="/motivos-rechazo" routerLinkActive="active">Motivos Rechazo</a>
-      <a routerLink="/unidades-medida" routerLinkActive="active">Unidades Medida</a>
-      <a routerLink="/permisos" routerLinkActive="active">Permisos</a>
-    </div>
-    <div class="nav-section">
-      <span class="nav-label">📊 Mirian</span>
-      <a routerLink="/defectos" routerLinkActive="active">Defectos</a>
-      <a routerLink="/alertas" routerLinkActive="active">Alertas Calidad</a>
-      <a routerLink="/capacitaciones" routerLinkActive="active">Capacitaciones</a>
-      <a routerLink="/devoluciones" routerLinkActive="active">Devoluciones</a>
-      <a routerLink="/historiales" routerLinkActive="active">Historial Mant.</a>
-    </div>
-    <div class="nav-section">
-      <span class="nav-label">⚙️ Gabriel</span>
-      <a routerLink="/detalles-inspeccion" routerLinkActive="active">Detalles Inspección</a>
-      <a routerLink="/categorias" routerLinkActive="active">Categorías</a>
-    </div>
-  </nav>
-</div>
-<div class="content">
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+} @else {
   <router-outlet></router-outlet>
-</div>
+}
