@@ -1,0 +1,1 @@
+El sistema implementa autenticación y autorización en el frontend. La autenticación permite validar la identidad del usuario mediante el inicio de sesión, mientras que la autorización controla los permisos de acceso a las diferentes funcionalidades del sistema según el rol del usuario. Esto garantiza la seguridad y el acceso adecuado a las operaciones del sistema.
